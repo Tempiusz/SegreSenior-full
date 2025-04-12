@@ -46,4 +46,4 @@ with torch.no_grad():
     predicted_class = class_names[predicted.item()]
 
 #print(f"Przewidywana kategoria: {predicted_class}")
-return predicted_class
+#return predicted_class
