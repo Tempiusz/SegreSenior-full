@@ -1,11 +1,37 @@
 import { useState } from 'react';
+import glassImg from './assets/szkło.jpeg';
+import metalImg from './assets/metal.jpeg';
+import paperImg from './assets/papier.jpeg';
+import plasticImg from './assets/plastik.jpeg';
+import trashImg from './assets/zmieszane.jpeg';
+
+const imageMap = {
+    glass: glassImg,
+    metal: metalImg,
+    paper: paperImg,
+    plastic: plasticImg,
+    trash: trashImg
+}
+
+const categoryTranslations = {
+    cardboard: 'Tektura',
+    glass: 'Szkło',
+    metal: 'Metal',
+    paper: 'Papier',
+    plastic: 'Plastik',
+    trash: 'Odpady Zmieszane'
+}
 
 function App() {
   const [file, setFile] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
+    setCategory(null); // resetuj wynik przy zmianie pliku
+    setError(null); // resetuj błąd przy zmianie pliku
   };
 
   const handleUpload = async () => {
@@ -15,12 +41,23 @@ function App() {
     formData.append('file', file);
 
     try {
-      await fetch('http://localhost:8000/upload-image/', {
+      const response = await fetch('http://localhost:8000/upload-image/', {
         method: 'POST',
         body: formData,
       });
+      //console.log("Zdjęcie przeszło")
+
+      if (!response.ok) {
+        throw new Error('Serwer zwrócił błąd');
+      }
+
+      const data = await response.json();
+      setCategory(data.category); // Ustaw wynik klasyfikacji
+      setError(null);
     } catch (error) {
       console.error('Błąd przy wysyłaniu pliku:', error);
+      setError('Nie udało się przetworzyć zdjęcia.');
+      setCategory(null); // wyczyść poprzedni wynik
     }
   };
 
@@ -48,6 +85,25 @@ function App() {
       >
         Gdzie mam wyrzucić?
       </button>
+
+      {category && (
+        <div className="flex flex-col items-center mt-6">
+            <p className="mt-6 text-xl text-green-700 font-semibold">
+                Wyrzuć to do kosza z napisem: <span className="underline">{categoryTranslations[category]}</span>
+            </p>
+            <img 
+                src={imageMap[category]}
+                alt={categoryTranslations[category]}
+                className="mt-4 w-64 h-64 object-contain"
+            />
+        </div>
+      )}
+
+      {error && (
+        <p className="mt-6 text-xl text-red-600 font-semibold">
+            {error}
+        </p>
+      )}
     </div>
   );
 }
