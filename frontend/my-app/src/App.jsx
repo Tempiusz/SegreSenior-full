@@ -1,24 +1,25 @@
 import { useState } from 'react';
-import glassImg from './assets/szkło.jpeg';
-import metalImg from './assets/metal.jpeg';
-import paperImg from './assets/papier.jpeg';
-import plasticImg from './assets/plastik.jpeg';
-import trashImg from './assets/zmieszane.jpeg';
+import glassImg from './assets/szkło.png';
+import metalImg from './assets/plastik.png';
+import paperImg from './assets/papier.png';
+import plasticImg from './assets/plastik.png';
+import trashImg from './assets/zmieszane.png';
 
 const imageMap = {
     glass: glassImg,
     metal: metalImg,
     paper: paperImg,
+    cardboard: paperImg,
     plastic: plasticImg,
     trash: trashImg
 }
 
 const categoryTranslations = {
-    cardboard: 'Tektura',
+    cardboard: 'Papier',
     glass: 'Szkło',
-    metal: 'Metal',
+    metal: 'Metale i tworzywa sztuczne',
     paper: 'Papier',
-    plastic: 'Plastik',
+    plastic: 'Metale i tworzywa sztuczne',
     trash: 'Odpady Zmieszane'
 }
 
