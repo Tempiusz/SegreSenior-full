@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './style.css'
 
 function App() {
   const [file, setFile] = useState(null);
@@ -25,19 +24,19 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <h1 className="title">Gdzie mam wyrzucić śmiecia?</h1>
+    <div className="ml-auto min-h-screen items-center bg-gray-100">
+      <h1 className="text-3xl font-bold mb-6 text-center">Gdzie mam wyrzucić śmiecia?</h1>
 
       <input
         type="file"
         accept=".png"
         onChange={handleFileChange}
-        className="file-input"
+        className="mb-4"
       />
 
       <button
         onClick={handleUpload}
-        className="submit-button"
+        className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
       >
         Gdzie mam wyrzucić?
       </button>
