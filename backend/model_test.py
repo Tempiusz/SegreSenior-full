@@ -6,9 +6,17 @@ import os
 #Klasy w kolejności, w jakiej są w zbiorze
 class_names = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
 
+#Katalog, w którym znajduje się aktualny skrypt
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+#Teraz wszystko liczymy względem BASE_DIR
+image_path = os.path.join(BASE_DIR, "temp_dataset-cover.png")
+model_path = os.path.join(BASE_DIR, "trashnet_model.pth")
+#print(image_path)
+
 #Ścieżka do modelu i testowego zdjęcia
-model_path = "trashnet_model.pth"
-image_path = "redbull.jpg"  # ← tu podaj nazwę swojego zdjęcia
+#model_path = "trashnet_model.pth"
+#image_path = "redbull.jpg"  # ← tu podaj nazwę swojego zdjęcia
 
 #Transformacje takie same jak przy treningu
 transform = transforms.Compose([
@@ -37,4 +45,5 @@ with torch.no_grad():
     _, predicted = torch.max(output, 1)
     predicted_class = class_names[predicted.item()]
 
-print(f"Przewidywana kategoria: {predicted_class}")
+#print(f"Przewidywana kategoria: {predicted_class}")
+return predicted_class

@@ -4,7 +4,8 @@ function App() {
   const [file, setFile] = useState(null);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
   };
 
   const handleUpload = async () => {
@@ -24,15 +25,22 @@ function App() {
   };
 
   return (
-    <div className="ml-auto min-h-screen items-center bg-gray-100">
+    <div className="ml-auto min-h-screen justify-center items-center bg-gray-100 flex w-screen h-screen flex-col">
       <h1 className="text-3xl font-bold mb-6 text-center">Gdzie mam wyrzucić śmiecia?</h1>
 
       <input
         type="file"
         accept=".png"
         onChange={handleFileChange}
-        className="mb-4"
+        id="fileInput"
+        className="hidden"
       />
+      <label
+        htmlFor="fileInput"
+        className="cursor-pointer py-2 px-4 bg-blue-500 text-white rounded-lg border border-gray-300 hover:bg-blue-600 flex items-center justify-center text-center mb-5"
+      >
+        {file ? `Wybrany plik: ${file.name}` : 'Wybierz plik'}
+      </label>
 
       <button
         onClick={handleUpload}
