@@ -6,33 +6,37 @@ import plasticImg from './assets/plastik.png';
 import trashImg from './assets/zmieszane.png';
 
 const imageMap = {
-    glass: glassImg,
-    metal: metalImg,
-    paper: paperImg,
-    cardboard: paperImg,
-    plastic: plasticImg,
-    trash: trashImg
-}
+  glass: glassImg,
+  metal: metalImg,
+  paper: paperImg,
+  cardboard: paperImg,
+  plastic: plasticImg,
+  trash: trashImg
+};
 
 const categoryTranslations = {
-    cardboard: 'Papier',
-    glass: 'Szkło',
-    metal: 'Metale i tworzywa sztuczne',
-    paper: 'Papier',
-    plastic: 'Metale i tworzywa sztuczne',
-    trash: 'Odpady Zmieszane'
-}
+  cardboard: 'Papier',
+  glass: 'Szkło',
+  metal: 'Metale i tworzywa sztuczne',
+  paper: 'Papier',
+  plastic: 'Metale i tworzywa sztuczne',
+  trash: 'Odpady Zmieszane'
+};
 
 function App() {
   const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [category, setCategory] = useState(null);
   const [error, setError] = useState(null);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-    setCategory(null); // resetuj wynik przy zmianie pliku
-    setError(null); // resetuj błąd przy zmianie pliku
+    if (selectedFile) {
+      setFile(selectedFile);
+      setImagePreview(URL.createObjectURL(selectedFile));
+      setCategory(null);
+      setError(null);
+    }
   };
 
   const handleUpload = async () => {
@@ -46,24 +50,23 @@ function App() {
         method: 'POST',
         body: formData,
       });
-      //console.log("Zdjęcie przeszło")
 
       if (!response.ok) {
         throw new Error('Serwer zwrócił błąd');
       }
 
       const data = await response.json();
-      setCategory(data.category); // Ustaw wynik klasyfikacji
+      setCategory(data.category);
       setError(null);
     } catch (error) {
       console.error('Błąd przy wysyłaniu pliku:', error);
       setError('Nie udało się przetworzyć zdjęcia.');
-      setCategory(null); // wyczyść poprzedni wynik
+      setCategory(null);
     }
   };
 
   return (
-    <div className="ml-auto min-h-screen justify-center items-center bg-gray-100 flex w-screen h-screen flex-col">
+    <div className="bground ml-auto min-h-screen justify-center items-center bg-gray-100 bg-opacity-0 flex w-screen h-auto flex-col py-10">
       <h1 className="text-3xl font-bold mb-6 text-center">Gdzie mam wyrzucić śmiecia?</h1>
 
       <input
@@ -87,23 +90,32 @@ function App() {
         Gdzie mam wyrzucić?
       </button>
 
+      {imagePreview && (
+        <div className="mt-6">
+          <p className="text-lg text-gray-800 font-medium mb-2">Twoje zdjęcie:</p>
+          <img
+            src={imagePreview}
+            alt="Podgląd zdjęcia"
+            className="max-h-5vh w-64 h-auto object-contain rounded shadow-md"
+          />
+        </div>
+      )}
+
       {category && (
         <div className="flex flex-col items-center mt-6">
-            <p className="mt-6 text-xl text-green-700 font-semibold">
-                Wyrzuć to do kosza z napisem: <span className="underline">{categoryTranslations[category]}</span>
-            </p>
-            <img 
-                src={imageMap[category]}
-                alt={categoryTranslations[category]}
-                className="mt-4 w-64 h-64 object-contain"
-            />
+          <p className="mt-6 text-xl text-green-700 font-semibold">
+            Wyrzuć to do kosza z napisem: <span className="underline">{categoryTranslations[category]}</span>
+          </p>
+          <img
+            src={imageMap[category]}
+            alt={categoryTranslations[category]}
+            className="mt-4 w-64 h-64 object-contain"
+          />
         </div>
       )}
 
       {error && (
-        <p className="mt-6 text-xl text-red-600 font-semibold">
-            {error}
-        </p>
+        <p className="mt-6 text-xl text-red-600 font-semibold">{error}</p>
       )}
     </div>
   );
