@@ -23,6 +23,15 @@ const categoryTranslations = {
   trash: 'Odpady Zmieszane'
 };
 
+const categoryPoems = {
+  cardboard: 'Jeśli twój karton jest w dobrym stanie, rozważ oddanie go na makulaturę.',
+  glass: 'Tu wrzucaj tylko szkło butelkowe! Zbite szklanki czy żarówki idą do mieszanych.',
+  metal: 'Pamiętaj aby zgnieść puszkę.',
+  paper: 'Uważaj na papierowe kubeczki – często zawierają plastik i należą do zmieszanych!',
+  plastic: 'Zgnieć plastikowe butelki – dzięki temu zajmą mniej miejsca!',
+  trash: 'Jeśli twoje odpady nie nadają się do segregacji, wrzuć je do zmieszanych!'
+};
+
 function App() {
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -33,7 +42,7 @@ function App() {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setImagePreview(URL.createObjectURL(selectedFile));
+      setImagePreview(URL.createObjectURL(selectedFile)); // <-- PODGLĄD ZDJĘCIA
       setCategory(null);
       setError(null);
     }
@@ -66,12 +75,12 @@ function App() {
   };
 
   return (
-    <div className="bground ml-auto min-h-screen justify-center items-center bg-gray-100 bg-opacity-0 flex w-screen h-auto flex-col py-10">
+    <div className="ml-auto min-h-screen justify-center items-center bg-gray-100 flex w-screen h-auto flex-col py-10">
       <h1 className="text-3xl font-bold mb-6 text-center">Gdzie mam wyrzucić śmiecia?</h1>
 
       <input
         type="file"
-        accept=".png"
+        accept="image/*"
         onChange={handleFileChange}
         id="fileInput"
         className="hidden"
@@ -96,7 +105,7 @@ function App() {
           <img
             src={imagePreview}
             alt="Podgląd zdjęcia"
-            className="max-h-5vh w-64 h-auto object-contain rounded shadow-md"
+            className="max-h-80 w-auto object-contain rounded shadow-md"
           />
         </div>
       )}
@@ -111,11 +120,16 @@ function App() {
             alt={categoryTranslations[category]}
             className="mt-4 w-64 h-64 object-contain"
           />
+          <p className="mt-4 text-center text-black text-lg italic">
+            {categoryPoems[category]}
+          </p>
         </div>
       )}
 
       {error && (
-        <p className="mt-6 text-xl text-red-600 font-semibold">{error}</p>
+        <p className="mt-6 text-xl text-red-600 font-semibold">
+          {error}
+        </p>
       )}
     </div>
   );
